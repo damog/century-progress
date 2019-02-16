@@ -1,24 +1,21 @@
 #!/usr/bin/env python
 
 import sys
+import json
 from datetime import datetime, date, time
 import secrets
 import os
 
-sys.path.insert(0, 'deps')
+#sys.path.insert(0, 'deps')
 import twitter
 
 def elapsed(now = datetime.now()):
     # TODO: UTC lol
 
-    # 0%
     start = datetime(2001, 1, 1, 0, 0, 0)
-
-    # 100%
     end = datetime(2100, 12, 31, 23, 59, 59)
 
     full = end - start
-
     # now = datetime(2020, 1, 1, 0, 0, 0)
 
     return ( (now - start).total_seconds() / full.total_seconds() ) * 100
@@ -30,9 +27,8 @@ def bar(elapsed):
     bar_off = u'\u2591' * int(off)
     return '[' + bar_on + bar_off + ']'
 
-
-
-def main():
+def lambda_handler(event, context):
+    global elapsed
     elapsed = elapsed()
     text = bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
 
@@ -43,5 +39,5 @@ def main():
                           access_token_secret=secrets.access_token_secret)
         status = api.PostUpdate( text )
 
-    print text
+    return { 'message' : text }
 
