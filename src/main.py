@@ -1,4 +1,11 @@
+#!/usr/bin/env python
+
+import sys
 from datetime import datetime, date, time
+import secrets
+
+sys.path.insert(0, 'deps')
+import twitter
 
 def elapsed(now = datetime.now()):
     # TODO: UTC lol
@@ -22,10 +29,15 @@ def bar(elapsed):
     bar_off = u'\u2591' * int(off)
     return '[' + bar_on + bar_off + ']'
 
+
+api = twitter.Api(consumer_key=secrets.consumer_key,
+                      consumer_secret=secrets.consumer_secret,
+                      access_token_key=secrets.access_token_key,
+                      access_token_secret=secrets.access_token_secret)
+
 elapsed = elapsed()
 
-print bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
+text = bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
 
-#print "%d %.4f " % ( how_many_chars(elapsed), elapsed )
-
+status = api.PostUpdate( text )
 
