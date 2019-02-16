@@ -3,6 +3,7 @@
 import sys
 from datetime import datetime, date, time
 import secrets
+import os
 
 sys.path.insert(0, 'deps')
 import twitter
@@ -30,14 +31,17 @@ def bar(elapsed):
     return '[' + bar_on + bar_off + ']'
 
 
-api = twitter.Api(consumer_key=secrets.consumer_key,
-                      consumer_secret=secrets.consumer_secret,
-                      access_token_key=secrets.access_token_key,
-                      access_token_secret=secrets.access_token_secret)
 
-elapsed = elapsed()
+def main():
+    elapsed = elapsed()
+    text = bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
 
-text = bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
+    if "TWEET" in os.environ:
+        api = twitter.Api(consumer_key=secrets.consumer_key,
+                          consumer_secret=secrets.consumer_secret,
+                          access_token_key=secrets.access_token_key,
+                          access_token_secret=secrets.access_token_secret)
+        status = api.PostUpdate( text )
 
-status = api.PostUpdate( text )
+    print text
 
