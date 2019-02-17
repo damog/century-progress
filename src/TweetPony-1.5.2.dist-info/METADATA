@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: TweetPony
+Version: 1.5.2
+Summary: A Twitter library for Python
+Home-page: https://github.com/Mezgrman/TweetPony
+Author: Julian Metzler
+Author-email: tweetpony@mezgr.de
+License: AGPLv3
+Keywords: twitter library api wrapper pony
+Platform: UNKNOWN
+Requires-Dist: requests
+
+UNKNOWN
+
+
