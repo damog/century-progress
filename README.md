@@ -17,6 +17,8 @@ The [@century_bar](http://twitter.com/century_bar) account currently (as of the 
 
 I've set up Amazon CloudWatch to run the function every 526 minutes, which is roughly when every 3rd decimal will see a change. This is roughly every 8.7 hours. I will change it to run every 5260 minutes later (roughly every 3.6 days) to allow for tweet on change of every 2nd decimal, but I'll do that after a few days.
 
+The code is so simple that it doesn't even make sense to license it, but it brings some libraries that I installed locally with `pip` such as [TweetPony](https://github.com/Mezgrman/TweetPony) and its dependencies. In anyway, the lambda function is written under the [WTFPL license](http://www.wtfpl.net/about/). Enjoy.
+
 Thanks!
 -------
 That's it. It was fun to learn a bunch of new things with this. Ping me on Twitter if you'd like to learn more.
