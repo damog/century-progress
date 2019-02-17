@@ -9,28 +9,21 @@ import os
 #sys.path.insert(0, 'deps')
 import twitter
 
-def elapsed(now = datetime.now()):
+
+def lambda_handler(event = None, context = None):
     # TODO: UTC lol
 
     start = datetime(2001, 1, 1, 0, 0, 0)
     end = datetime(2100, 12, 31, 23, 59, 59)
 
     full = end - start
-    # now = datetime(2020, 1, 1, 0, 0, 0)
+    elapsed = ( (datetime.now() - start).total_seconds() / full.total_seconds() ) * 100
 
-    return ( (now - start).total_seconds() / full.total_seconds() ) * 100
-
-def bar(elapsed):
     on = ( 15 * elapsed ) / 100
     off = 15 - on
     bar_on = u'\u2593' * int(on)
     bar_off = u'\u2591' * int(off)
-    return '[' + bar_on + bar_off + ']'
-
-def lambda_handler(event, context):
-    global elapsed
-    elapsed = elapsed()
-    text = bar(elapsed) + ' ' + "%.4f" % elapsed + '%'
+    text = '[' + bar_on + bar_off + ']' + ' ' + "%.4f" % elapsed + '%'
 
     if "TWEET" in os.environ:
         api = twitter.Api(consumer_key=secrets.consumer_key,
