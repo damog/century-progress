@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# LICENSE:
+#   http://www.wtfpl.net/about/
+
 import sys
 import json
 from datetime import datetime, date, time
