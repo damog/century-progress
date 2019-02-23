@@ -23,7 +23,7 @@ def lambda_handler(event = None, context = None):
     off     = 15 - on
     bar_on  = u'\u2593' * int(on)
     bar_off = u'\u2591' * int(off)
-    text    = bar_on + bar_off + ' ' + "%.4f" % elapsed + '%'
+    text    = bar_on + bar_off + ' ' + "%.2f" % elapsed + '%'
 
     if "TWEET" in os.environ:
         api = tweetpony.API(    consumer_key        = secrets.consumer_key,
