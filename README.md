@@ -20,6 +20,10 @@ The original implementation was an **AWS Lambda function** that tweeted to [@cen
 
 The Lambda ran on AWS's free tier, costing essentially nothing. The dream was for it to tweet **forever**—well, until December 31st, 2100 at 23:59:59. I'd be 116 years old. I may have plans that day.
 
+Here's the [@century_bar](https://twitter.com/century_bar) account, frozen in time at 22.2% (March 2023):
+
+![Twitter @century_bar account screenshot](docs/images/twitter-century-bar.png)
+
 ### 2023: Twitter's API Paywall
 
 Then Elon Musk happened.
