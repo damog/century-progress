@@ -260,7 +260,7 @@
 
         <div class="progress-card">
             <div class="percentage" id="percentage">--.--%</div>
-            <div class="update-freq">The 7th decimal updates every ~3 seconds</div>
+            <div class="update-freq">The 10th decimal updates every ~3 milliseconds</div>
             
             <div class="bar-wrapper">
                 <div class="bar-container" id="bar">
@@ -378,7 +378,7 @@
             const percentage = (elapsed / TOTAL_MS) * 100;
             
             // Update percentage display
-            document.getElementById('percentage').textContent = percentage.toFixed(7) + '%';
+            document.getElementById('percentage').textContent = percentage.toFixed(10) + '%';
             
             // Update bar - each bar represents 1%, each cell inside represents 0.01%
             const fullBars = Math.floor(percentage);
