@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21st Century Progress</title>
+    <meta name="description" content="How far are we into the 21st century?">
+    <meta property="og:title" content="21st Century Progress">
+    <meta property="og:description" content="Real-time progress bar for the 21st century (2001-2100)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-card: #12121a;
+            --accent: #00ffc8;
+            --accent-dim: #00ffc820;
+            --text: #e8e8ed;
+            --text-dim: #6b6b7b;
+            --bar-on: #00ffc8;
+            --bar-off: #1a1a2e;
+            --glow: 0 0 60px #00ffc830, 0 0 120px #00ffc810;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, #1a1a3010 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, #00ffc805 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, #00ffc805 0%, transparent 40%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', system-ui, sans-serif;
+            color: var(--text);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            font-weight: 300;
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid #ffffff08;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+        }
+
+        .percentage {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(3rem, 12vw, 5rem);
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 40px var(--accent-dim);
+        }
+
+        .update-freq {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .bar-wrapper {
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .bar-container {
+            display: flex;
+            gap: 1px;
+            justify-content: center;
+            min-width: fit-content;
+            padding: 0 0.5rem;
+        }
+
+        .bar-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .bar-block {
+            width: 6px;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 0;
+            background: var(--bar-off);
+            border-radius: 2px;
+            overflow: hidden;
+            height: 60px;
+        }
+
+        .bar-block .cell {
+            background: transparent;
+            transition: background 0.15s ease;
+        }
+
+        .bar-block .cell.on {
+            background: var(--bar-on);
+        }
+
+        .bar-block.full {
+            box-shadow: 0 0 4px var(--accent-dim);
+        }
+
+        .bar-block.partial {
+            box-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent-dim);
+        }
+
+        .bar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.5rem 0.5rem 0;
+            max-width: 100%;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat {
+            background: #ffffff05;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .footer a:hover {
+            opacity: 0.7;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 1.5rem;
+        }
+
+        .note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #ffffff05;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .note a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">21st Century Progress</h1>
+            <p class="subtitle">January 1, 2001 00:00:00 UTC → December 31, 2100 23:59:59 UTC</p>
+            <p class="subtitle local-time" id="local-times"></p>
+        </header>
+
+        <div class="progress-card">
+            <div class="percentage" id="percentage">--.--%</div>
+            <div class="update-freq">The 5th decimal updates every ~5 minutes 16 seconds</div>
+            
+            <div class="bar-wrapper">
+                <div class="bar-container" id="bar">
+                    <!-- 100 blocks generated by JS -->
+                </div>
+                <div class="bar-labels">
+                    <span>0%</span>
+                    <span>25%</span>
+                    <span>50%</span>
+                    <span>75%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Time Elapsed</div>
+                    <div class="stat-value" id="time-elapsed">--</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Time Remaining</div>
+                    <div class="stat-value" id="time-remaining">--</div>
+                </div>
+            </div>
+
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                Updates in real-time
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Why 2001–2100?</strong> The 21st century officially began on January 1, 2001 (not 2000) because the Gregorian calendar has no "year zero"—it goes directly from 1 BC to 1 AD. Thus each century spans years ending in 01 through 00. 
+            <a href="https://en.wikipedia.org/wiki/21st_century" target="_blank">Learn more →</a>
+        </div>
+
+        <footer class="footer">
+            <p>Built by <a href="https://damog.net" target="_blank">David Moreno</a></p>
+        </footer>
+    </div>
+
+    <script>
+        /*
+         * 21st Century Definition:
+         * - Start: January 1, 2001 00:00:00 UTC
+         * - End: December 31, 2100 23:59:59 UTC
+         * 
+         * The 21st century began in 2001 (not 2000) because there was no year 0
+         * in the Gregorian calendar. The 1st century was 1-100 AD, the 2nd was
+         * 101-200 AD, and so on. Therefore the 21st century is 2001-2100.
+         * 
+         * Total duration: 36,524 days (100 years with 24 leap years; 2100 is NOT
+         * a leap year since it's divisible by 100 but not 400)
+         * 
+         * Update frequency for 0.001% (3rd decimal):
+         * Total seconds = 36524 * 24 * 60 * 60 = 3,155,673,600
+         * 0.001% = 31,556.736 seconds ≈ 8 hours 46 minutes
+         */
+
+        const START = new Date(Date.UTC(2001, 0, 1, 0, 0, 0));
+        const END = new Date(Date.UTC(2100, 11, 31, 23, 59, 59));
+        const TOTAL_MS = END - START;
+        const BARS = 100;
+        const CELLS_PER_BAR = 100; // 10x10 grid
+
+        // Generate 100 bars, each with 100 cells (10x10 grid)
+        const barContainer = document.getElementById('bar');
+        for (let i = 0; i < BARS; i++) {
+            const block = document.createElement('div');
+            block.className = 'bar-block';
+            block.dataset.index = i;
+            
+            // Create 100 cells inside each bar (filled bottom-to-top, left-to-right)
+            for (let c = 0; c < CELLS_PER_BAR; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.cell = c;
+                block.appendChild(cell);
+            }
+            
+            barContainer.appendChild(block);
+        }
+
+        function formatDuration(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+            
+            // Calculate years, months, days using more precise method
+            const years = Math.floor(totalDays / 365.2425); // Gregorian average
+            let remainingDays = totalDays - Math.floor(years * 365.2425);
+            const months = Math.floor(remainingDays / 30.4375);
+            remainingDays = Math.floor(remainingDays - (months * 30.4375));
+            const days = Math.max(0, remainingDays);
+            const hours = totalHours % 24;
+            const minutes = totalMinutes % 60;
+            const seconds = totalSeconds % 60;
+
+            const parts = [];
+            if (years > 0) parts.push(`${years}y`);
+            parts.push(`${months}mo`);
+            parts.push(`${days}d`);
+            parts.push(`${hours}h`);
+            parts.push(`${minutes}m`);
+            parts.push(`${seconds}s`);
+
+            return parts.join(' ');
+        }
+
+        function update() {
+            const now = new Date();
+            const elapsed = now - START;
+            const remaining = END - now;
+            const percentage = (elapsed / TOTAL_MS) * 100;
+            
+            // Update percentage display
+            document.getElementById('percentage').textContent = percentage.toFixed(5) + '%';
+            
+            // Update bar - each bar represents 1%, each cell inside represents 0.01%
+            const fullBars = Math.floor(percentage);
+            const partialCells = Math.floor((percentage - fullBars) * 100); // 0-100 cells lit in current bar
+            
+            document.querySelectorAll('.bar-block').forEach((block, barIndex) => {
+                const cells = block.querySelectorAll('.cell');
+                block.classList.remove('full', 'partial');
+                
+                if (barIndex < fullBars) {
+                    // Fully filled bars - all 100 cells lit
+                    block.classList.add('full');
+                    cells.forEach(cell => cell.classList.add('on'));
+                } else if (barIndex === fullBars) {
+                    // Partially filled bar (current) - light cells based on sub-percentage
+                    block.classList.add('partial');
+                    cells.forEach((cell, cellIndex) => {
+                        cell.classList.toggle('on', cellIndex < partialCells);
+                    });
+                } else {
+                    // Empty bars - no cells lit
+                    cells.forEach(cell => cell.classList.remove('on'));
+                }
+            });
+            
+            // Update time elapsed/remaining
+            document.getElementById('time-elapsed').textContent = formatDuration(elapsed);
+            document.getElementById('time-remaining').textContent = formatDuration(remaining);
+        }
+
+        // Display local timezone times
+        function formatLocalTime(date) {
+            return date.toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+        }
+        
+        const localStart = formatLocalTime(START);
+        const localEnd = formatLocalTime(END);
+        const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('local-times').textContent = `${localStart} → ${localEnd}`;
+
+        // Update immediately and then every second
+        update();
+        setInterval(update, 1000);
+    </script>
+</body>
+</html>
