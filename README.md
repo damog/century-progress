@@ -34,7 +34,7 @@ Rather than pay $100/month to tweet a progress bar, I rebuilt the project as a *
 
 The new version is actually *better*:
 - **Real-time updates** (every second, not every 8 hours)
-- **5 decimal places** of precision
+- **8 decimal places** of precision (the last digit ticks ~3 times per second!)
 - **Visual progress bar** with 100 bars × 100 cells (10,000 total cells!)
 - **Time elapsed/remaining** broken down to years, months, days, hours, minutes, seconds
 - **Local timezone support**
@@ -73,7 +73,7 @@ century-progress/
 Pure client-side JavaScript. Features:
 - 100 progress bars, each containing a 10×10 grid (100 cells)
 - Each cell = 0.01% of the century
-- 5 decimal precision (updates every ~5 min 16 sec)
+- 8 decimal precision (8th decimal updates every ~316ms)
 - Runs entirely in your browser
 
 ### Legacy Lambda (`src/`)
@@ -121,6 +121,9 @@ zip -r ../lambda.zip .
 - **Total duration:** 36,524 days (100 years, accounting for 24 leap years; 2100 is NOT a leap year)
 - **Total seconds:** 3,155,673,600
 - **Update frequencies:**
+  - 8th decimal (0.00000001%): ~316 milliseconds
+  - 7th decimal (0.0000001%): ~3.16 seconds
+  - 6th decimal (0.000001%): ~31.6 seconds
   - 5th decimal (0.00001%): ~5 minutes 16 seconds
   - 4th decimal (0.0001%): ~52 minutes 36 seconds  
   - 3rd decimal (0.001%): ~8 hours 46 minutes
@@ -144,4 +147,4 @@ zip -r ../lambda.zip .
 
 ---
 
-*Here's to hoping we make it to 2100. See you at 100.00000%* 🎉
+*Here's to hoping we make it to 2100. See you at 100.00000000%* 🎉
