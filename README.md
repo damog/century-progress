@@ -1,5 +1,11 @@
 # 21st Century Progress Bar
 
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-00ffc8?logo=github)
+![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen)
+![No Backend](https://img.shields.io/badge/Backend-None-blue)
+![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-f7df1e?logo=javascript&logoColor=black)
+![Last Commit](https://img.shields.io/github/last-commit/damog/century-progress)
+
 A real-time progress bar tracking how far humanity has made it through the 21st century.
 
 **🌐 Live Site: [damog.github.io/century-progress](https://damog.github.io/century-progress/)**
